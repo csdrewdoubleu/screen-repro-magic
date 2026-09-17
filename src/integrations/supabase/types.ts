@@ -14,7 +14,160 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          industry: string
+          name: string
+          size_band: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          industry: string
+          name: string
+          size_band: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          industry?: string
+          name?: string
+          size_band?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          automate_first: string | null
+          company_id: string | null
+          company_name: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+        }
+        Insert: {
+          automate_first?: string | null
+          company_id?: string | null
+          company_name?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+        }
+        Update: {
+          automate_first?: string | null
+          company_id?: string | null
+          company_name?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      respondents: {
+        Row: {
+          annoying_task: string | null
+          archetype: string
+          channel_routine: string
+          channel_sameday: string
+          channel_urgent: string
+          company_id: string | null
+          created_at: string
+          edit_token: string
+          first_name: string
+          function: string
+          hard_rule: string | null
+          hours_window: string | null
+          id: string
+          rekey_hours: string | null
+          rekey_pair: string[] | null
+          role_title: string | null
+          scores: Json
+          seniority: string
+          tenure_band: string
+          tools: string[]
+          updated_at: string
+          waited_on_by: string | null
+          waits_on: string | null
+          work_mode: string
+        }
+        Insert: {
+          annoying_task?: string | null
+          archetype?: string
+          channel_routine?: string
+          channel_sameday?: string
+          channel_urgent?: string
+          company_id?: string | null
+          created_at?: string
+          edit_token?: string
+          first_name: string
+          function?: string
+          hard_rule?: string | null
+          hours_window?: string | null
+          id?: string
+          rekey_hours?: string | null
+          rekey_pair?: string[] | null
+          role_title?: string | null
+          scores?: Json
+          seniority?: string
+          tenure_band?: string
+          tools?: string[]
+          updated_at?: string
+          waited_on_by?: string | null
+          waits_on?: string | null
+          work_mode?: string
+        }
+        Update: {
+          annoying_task?: string | null
+          archetype?: string
+          channel_routine?: string
+          channel_sameday?: string
+          channel_urgent?: string
+          company_id?: string | null
+          created_at?: string
+          edit_token?: string
+          first_name?: string
+          function?: string
+          hard_rule?: string | null
+          hours_window?: string | null
+          id?: string
+          rekey_hours?: string | null
+          rekey_pair?: string[] | null
+          role_title?: string | null
+          scores?: Json
+          seniority?: string
+          tenure_band?: string
+          tools?: string[]
+          updated_at?: string
+          waited_on_by?: string | null
+          waits_on?: string | null
+          work_mode?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "respondents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
