@@ -423,7 +423,7 @@ export function Dashboard({
             ? "No decision-makers have been mapped yet."
             : `${deciders.length} of ${decidersTotal} decision-makers are phone-first. Anything that needs their sign-off should reach them by text, not email.`}
         </p>
-        <div className="surface -mx-1 overflow-x-auto p-1">
+        <div className="surface overflow-x-auto p-1">
           <table className="w-full min-w-[640px] border-collapse text-sm">
             <thead>
               <tr className="text-left">
