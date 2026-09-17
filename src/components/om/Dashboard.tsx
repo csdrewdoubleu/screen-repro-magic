@@ -70,7 +70,7 @@ function BarRow({ label, value, total }: { label: string; value: number; total: 
 
 function Panel({ children, title }: { children: React.ReactNode; title?: string }) {
   return (
-    <div className="surface p-5">
+    <div className="surface min-w-0 p-5">
       {title ? <h3 className="mb-3 font-display text-lg text-forest">{title}</h3> : null}
       {children}
     </div>
@@ -352,7 +352,7 @@ export function Dashboard({
             {tools.length === 0 ? (
               <p className="text-sm text-ink-soft">No tools named yet.</p>
             ) : (
-              <div className="-mx-2 overflow-x-auto px-2">
+              <div className="max-w-full overflow-x-auto">
                 <table className="w-full border-collapse text-xs">
                   <thead>
                     <tr>
