@@ -161,7 +161,7 @@ export const ARCHETYPES: Archetype[] = [
 ];
 
 export function computeArchetype(scores: Scores): string {
-  let best = ARCHETYPES[0];
+  let best = ARCHETYPES[0]!;
   let bestDistance = Infinity;
   for (const archetype of ARCHETYPES) {
     let sum = 0;
@@ -178,7 +178,7 @@ export function computeArchetype(scores: Scores): string {
 }
 
 export function archetypeByName(name: string): Archetype {
-  return ARCHETYPES.find((a) => a.name === name) ?? ARCHETYPES[0];
+  return ARCHETYPES.find((a) => a.name === name) ?? ARCHETYPES[0]!;
 }
 
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -188,7 +188,7 @@ export function generateCode(): string {
   const bytes = new Uint32Array(6);
   crypto.getRandomValues(bytes);
   for (let i = 0; i < 6; i += 1) {
-    out += CODE_ALPHABET[bytes[i] % CODE_ALPHABET.length];
+    out += CODE_ALPHABET[bytes[i]! % CODE_ALPHABET.length]!;
   }
   return out;
 }
