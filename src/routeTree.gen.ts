@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StartRouteImport } from './routes/start'
+import { Route as DoneEditTokenRouteImport } from './routes/done.$editToken'
 import { Route as EditEditTokenRouteImport } from './routes/edit.$editToken'
 import { Route as JoinCodeRouteImport } from './routes/join.$code'
 import { Route as SurveyCodeRouteImport } from './routes/survey.$code'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const StartRoute = StartRouteImport.update({
   id: '/start',
   path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoneEditTokenRoute = DoneEditTokenRouteImport.update({
+  id: '/done/$editToken',
+  path: '/done/$editToken',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditEditTokenRoute = EditEditTokenRouteImport.update({
@@ -44,6 +50,7 @@ const SurveyCodeRoute = SurveyCodeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/start': typeof StartRoute
+  '/done/$editToken': typeof DoneEditTokenRoute
   '/edit/$editToken': typeof EditEditTokenRoute
   '/join/$code': typeof JoinCodeRoute
   '/survey/$code': typeof SurveyCodeRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/start': typeof StartRoute
+  '/done/$editToken': typeof DoneEditTokenRoute
   '/edit/$editToken': typeof EditEditTokenRoute
   '/join/$code': typeof JoinCodeRoute
   '/survey/$code': typeof SurveyCodeRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/start': typeof StartRoute
+  '/done/$editToken': typeof DoneEditTokenRoute
   '/edit/$editToken': typeof EditEditTokenRoute
   '/join/$code': typeof JoinCodeRoute
   '/survey/$code': typeof SurveyCodeRoute
@@ -66,13 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/start' | '/edit/$editToken' | '/join/$code' | '/survey/$code'
+    | '/'
+    | '/start'
+    | '/done/$editToken'
+    | '/edit/$editToken'
+    | '/join/$code'
+    | '/survey/$code'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/start' | '/edit/$editToken' | '/join/$code' | '/survey/$code'
+  to:
+    | '/'
+    | '/start'
+    | '/done/$editToken'
+    | '/edit/$editToken'
+    | '/join/$code'
+    | '/survey/$code'
   id:
     | '__root__'
     | '/'
     | '/start'
+    | '/done/$editToken'
     | '/edit/$editToken'
     | '/join/$code'
     | '/survey/$code'
@@ -81,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StartRoute: typeof StartRoute
+  DoneEditTokenRoute: typeof DoneEditTokenRoute
   EditEditTokenRoute: typeof EditEditTokenRoute
   JoinCodeRoute: typeof JoinCodeRoute
   SurveyCodeRoute: typeof SurveyCodeRoute
@@ -100,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/start'
       fullPath: '/start'
       preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/done/$editToken': {
+      id: '/done/$editToken'
+      path: '/done/$editToken'
+      fullPath: '/done/$editToken'
+      preLoaderRoute: typeof DoneEditTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/edit/$editToken': {
@@ -129,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StartRoute: StartRoute,
+  DoneEditTokenRoute: DoneEditTokenRoute,
   EditEditTokenRoute: EditEditTokenRoute,
   JoinCodeRoute: JoinCodeRoute,
   SurveyCodeRoute: SurveyCodeRoute,
