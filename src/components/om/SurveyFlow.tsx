@@ -294,7 +294,7 @@ export function SurveyFlow({
     setSaving(true);
     const { error: saveError } = await supabase
       .from("respondents")
-      .update(payloadForStep(step))
+      .update(payloadForStep(step) as never)
       .eq("id", respondent.id);
     setSaving(false);
     if (saveError) {
