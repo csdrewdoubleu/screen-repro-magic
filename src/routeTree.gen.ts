@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StartRouteImport } from './routes/start'
+import { Route as CCodeRouteImport } from './routes/c.$code'
+import { Route as DoneEditTokenRouteImport } from './routes/done.$editToken'
+import { Route as EditEditTokenRouteImport } from './routes/edit.$editToken'
+import { Route as JoinCodeRouteImport } from './routes/join.$code'
+import { Route as SurveyCodeRouteImport } from './routes/survey.$code'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CCodeRoute = CCodeRouteImport.update({
+  id: '/c/$code',
+  path: '/c/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DoneEditTokenRoute = DoneEditTokenRouteImport.update({
+  id: '/done/$editToken',
+  path: '/done/$editToken',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditEditTokenRoute = EditEditTokenRouteImport.update({
+  id: '/edit/$editToken',
+  path: '/edit/$editToken',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinCodeRoute = JoinCodeRouteImport.update({
+  id: '/join/$code',
+  path: '/join/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurveyCodeRoute = SurveyCodeRouteImport.update({
+  id: '/survey/$code',
+  path: '/survey/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/start': typeof StartRoute
+  '/c/$code': typeof CCodeRoute
+  '/done/$editToken': typeof DoneEditTokenRoute
+  '/edit/$editToken': typeof EditEditTokenRoute
+  '/join/$code': typeof JoinCodeRoute
+  '/survey/$code': typeof SurveyCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/start': typeof StartRoute
+  '/c/$code': typeof CCodeRoute
+  '/done/$editToken': typeof DoneEditTokenRoute
+  '/edit/$editToken': typeof EditEditTokenRoute
+  '/join/$code': typeof JoinCodeRoute
+  '/survey/$code': typeof SurveyCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/start': typeof StartRoute
+  '/c/$code': typeof CCodeRoute
+  '/done/$editToken': typeof DoneEditTokenRoute
+  '/edit/$editToken': typeof EditEditTokenRoute
+  '/join/$code': typeof JoinCodeRoute
+  '/survey/$code': typeof SurveyCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/start'
+    | '/c/$code'
+    | '/done/$editToken'
+    | '/edit/$editToken'
+    | '/join/$code'
+    | '/survey/$code'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/start'
+    | '/c/$code'
+    | '/done/$editToken'
+    | '/edit/$editToken'
+    | '/join/$code'
+    | '/survey/$code'
+  id:
+    | '__root__'
+    | '/'
+    | '/start'
+    | '/c/$code'
+    | '/done/$editToken'
+    | '/edit/$editToken'
+    | '/join/$code'
+    | '/survey/$code'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StartRoute: typeof StartRoute
+  CCodeRoute: typeof CCodeRoute
+  DoneEditTokenRoute: typeof DoneEditTokenRoute
+  EditEditTokenRoute: typeof EditEditTokenRoute
+  JoinCodeRoute: typeof JoinCodeRoute
+  SurveyCodeRoute: typeof SurveyCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/c/$code': {
+      id: '/c/$code'
+      path: '/c/$code'
+      fullPath: '/c/$code'
+      preLoaderRoute: typeof CCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/done/$editToken': {
+      id: '/done/$editToken'
+      path: '/done/$editToken'
+      fullPath: '/done/$editToken'
+      preLoaderRoute: typeof DoneEditTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/edit/$editToken': {
+      id: '/edit/$editToken'
+      path: '/edit/$editToken'
+      fullPath: '/edit/$editToken'
+      preLoaderRoute: typeof EditEditTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join/$code': {
+      id: '/join/$code'
+      path: '/join/$code'
+      fullPath: '/join/$code'
+      preLoaderRoute: typeof JoinCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/survey/$code': {
+      id: '/survey/$code'
+      path: '/survey/$code'
+      fullPath: '/survey/$code'
+      preLoaderRoute: typeof SurveyCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StartRoute: StartRoute,
+  CCodeRoute: CCodeRoute,
+  DoneEditTokenRoute: DoneEditTokenRoute,
+  EditEditTokenRoute: EditEditTokenRoute,
+  JoinCodeRoute: JoinCodeRoute,
+  SurveyCodeRoute: SurveyCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
