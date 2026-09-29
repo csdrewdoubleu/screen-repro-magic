@@ -75,7 +75,6 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [selected, setSelected] = useState<Respondent | null>(null);
   const [colors, setColors] = useState<Colors | null>(null);
-  const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
     setColors(readColors());
@@ -262,7 +261,6 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
             linkDirectionalArrowRelPos={0.92}
             cooldownTime={3000}
             onEngineStop={() => undefined}
-            onZoom={({ k }) => setZoom(k)}
             onNodeHover={(n) => setHover((n as GNode) ?? null)}
             onNodeClick={(n) => {
               const node = n as GNode;
@@ -338,7 +336,6 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
             <PersonCard person={selected} extended />
           </div>
         ) : null}
-        <span className="sr-only">Zoom {zoom.toFixed(1)}</span>
       </div>
       <Legend colors={colors} />
     </div>
