@@ -14,8 +14,8 @@ type GNode = {
   phoneFirst?: boolean;
   x?: number;
   y?: number;
-  fx?: number | undefined;
-  fy?: number | undefined;
+  fx?: number;
+  fy?: number;
 };
 type GLink = {
   source: string | GNode;
@@ -274,8 +274,8 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
             }}
             onNodeDragEnd={(n) => {
               const node = n as GNode;
-              node.fx = node.x;
-              node.fy = node.y;
+              if (node.x != null) node.fx = node.x;
+              if (node.y != null) node.fy = node.y;
             }}
           />
         ) : null}
