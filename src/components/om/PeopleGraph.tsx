@@ -79,7 +79,7 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
   const [selected, setSelected] = useState<Respondent | null>(null);
   const [colors, setColors] = useState<Colors | null>(null);
   const logos = useRef(new Map<string, HTMLImageElement>());
-  const [, setLogoVersion] = useState(0);
+  const [logoVersion, setLogoVersion] = useState(0);
 
   useEffect(() => {
     setColors(readColors());
@@ -247,7 +247,7 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
       }
       ctx.globalAlpha = 1;
     },
-    [colors, neighbors, hover, setLogoVersion],
+    [colors, neighbors, hover, logoVersion],
   );
 
   const paintArea = useCallback((node: GNode, color: string, ctx: CanvasRenderingContext2D) => {
