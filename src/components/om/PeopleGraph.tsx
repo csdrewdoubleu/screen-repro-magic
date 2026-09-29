@@ -148,12 +148,16 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
   }, [respondents, isMobile]);
 
   useEffect(() => {
-    const fg = fgRef.current;
-    if (!fg) return;
-    fg.d3Force("charge")?.strength(-180);
-    fg.d3Force("link")?.distance((l: GLink) => (l.kind === "waits" ? 110 : 60));
-    fg.d3ReheatSimulation();
-  }, [data]);
+    const id = window.setTimeout(() => {
+      const fg = fgRef.current;
+      if (!fg) return;
+      fg.d3Force("charge")?.strength(-180);
+      fg.d3Force("link")?.distance((l: GLink) => (l.kind === "waits" ? 110 : 60));
+      fg.d3ReheatSimulation();
+    }, 50);
+    return () => window.clearTimeout(id);
+  }, [data, colors]);
+  const fitted = useRef(false);
 
   const neighbors = useMemo(() => {
     if (!hover) return null;
@@ -260,7 +264,12 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
             linkDirectionalArrowLength={(l) => ((l as GLink).kind === "waits" ? 6 : 0)}
             linkDirectionalArrowRelPos={0.92}
             cooldownTime={3000}
-            onEngineStop={() => undefined}
+            onEngineStop={() => {
+              if (!fitted.current) {
+                fitted.current = true;
+                fgRef.current?.zoomToFit(400, 50);
+              }
+            }}
             onNodeHover={(n) => queueMicrotask(() => setHover((n as GNode) ?? null))}
             onNodeClick={(n) => {
               const node = n as GNode;
