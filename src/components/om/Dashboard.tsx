@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { PeopleSection } from "./PeopleSection";
 import { QRCodeSVG } from "qrcode.react";
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { supabase } from "@/integrations/supabase/client";

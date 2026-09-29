@@ -14,8 +14,8 @@ type GNode = {
   phoneFirst?: boolean;
   x?: number;
   y?: number;
-  fx?: number;
-  fy?: number;
+  fx?: number | undefined;
+  fy?: number | undefined;
 };
 type GLink = {
   source: string | GNode;
