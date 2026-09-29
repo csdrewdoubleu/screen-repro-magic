@@ -261,7 +261,7 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
             linkDirectionalArrowRelPos={0.92}
             cooldownTime={3000}
             onEngineStop={() => undefined}
-            onNodeHover={(n) => setHover((n as GNode) ?? null)}
+            onNodeHover={(n) => queueMicrotask(() => setHover((n as GNode) ?? null))}
             onNodeClick={(n) => {
               const node = n as GNode;
               if (node.kind === "person") setSelected(node.person!);
