@@ -14,6 +14,8 @@ export const Route = createFileRoute("/c/$code")({
         content:
           "Working styles, reach preferences, tool stack, hand-offs, and automation opportunities for your team.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Your company operating map" },
       {
         property: "og:description",

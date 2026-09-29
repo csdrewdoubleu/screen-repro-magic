@@ -13,6 +13,8 @@ export const Route = createFileRoute("/edit/$editToken")({
         name: "description",
         content: "Change how you work or how to reach you, and your company map updates with it.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Update your Operating Map profile" },
       {
         property: "og:description",

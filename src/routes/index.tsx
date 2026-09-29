@@ -17,6 +17,8 @@ export const Route = createFileRoute("/")({
         content:
           "A five-minute team intake from Cascade Studios that maps working styles, reach preferences, tools, and automation opportunities.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Landing,

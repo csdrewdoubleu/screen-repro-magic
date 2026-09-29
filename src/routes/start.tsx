@@ -12,6 +12,8 @@ export const Route = createFileRoute("/start")({
         name: "description",
         content: "Create your company map and invite the team with a six-character code.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Start your Operating Map" },
       {
         property: "og:description",

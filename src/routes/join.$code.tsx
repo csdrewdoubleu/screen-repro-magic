@@ -12,6 +12,8 @@ export const Route = createFileRoute("/join/$code")({
         name: "description",
         content: "Add your working style to your company's operating map in under five minutes.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Join your team's Operating Map" },
       {
         property: "og:description",

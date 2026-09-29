@@ -13,6 +13,8 @@ export const Route = createFileRoute("/done/$editToken")({
         name: "description",
         content: "Your archetype, how you like to be reached, and your private edit link.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Your working-style profile" },
       {
         property: "og:description",

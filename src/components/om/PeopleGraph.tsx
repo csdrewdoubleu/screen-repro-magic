@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import clioAsset from "@/assets/clio-icon.png.asset.json";
 import { ARCHETYPES, type Respondent } from "@/lib/om";
 import { PersonCard } from "./PeopleSection";
+import { TOOL_LOGOS } from "./tool-logos";
 
 type GNode = {
   id: string;
@@ -75,6 +78,8 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const [selected, setSelected] = useState<Respondent | null>(null);
   const [colors, setColors] = useState<Colors | null>(null);
+  const logos = useRef(new Map<string, HTMLImageElement>());
+  const [logoVersion, setLogoVersion] = useState(0);
 
   useEffect(() => {
     setColors(readColors());
@@ -148,6 +153,19 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
   }, [respondents, isMobile]);
 
   useEffect(() => {
+    for (const node of data.nodes) {
+      if (node.kind !== "tool" || logos.current.has(node.label)) continue;
+      const src = node.label === "Clio" ? clioAsset.url : TOOL_LOGOS[node.label];
+      if (!src) continue;
+      const image = new Image();
+      logos.current.set(node.label, image);
+      image.onload = () => setLogoVersion((value) => value + 1);
+      image.onerror = () => setLogoVersion((value) => value + 1);
+      image.src = src;
+    }
+  }, [data]);
+
+  useEffect(() => {
     const id = window.setTimeout(() => {
       const fg = fgRef.current;
       if (!fg) return;
@@ -199,9 +217,25 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
         ctx.fillStyle = colors.cream;
         ctx.fillText(node.label, node.x, node.y + node.r + (node.phoneFirst ? 6 : 4));
       } else {
+        const image = logos.current.get(node.label);
+        ctx.fillStyle = colors.cream;
+        ctx.fill();
         ctx.strokeStyle = alpha(colors.cream, 0.55);
         ctx.lineWidth = 1;
         ctx.stroke();
+        if (image?.complete && image.naturalWidth > 0) {
+          const size = node.r * 1.65;
+          const ratio = Math.min(size / image.naturalWidth, size / image.naturalHeight);
+          const w = image.naturalWidth * ratio;
+          const h = image.naturalHeight * ratio;
+          ctx.drawImage(image, node.x - w / 2, node.y - h / 2, w, h);
+        } else {
+          ctx.font = `bold ${Math.max(8, node.r)}px Inter, sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillStyle = colors.bg;
+          ctx.fillText(node.label.trim().slice(0, 2).toUpperCase(), node.x, node.y, node.r * 1.7);
+        }
         const show = hover?.id === node.id || scale > 1.4 || (node.users?.length ?? 0) >= 3;
         if (show) {
           ctx.font = `10px "DM Mono", monospace`;
@@ -213,7 +247,7 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
       }
       ctx.globalAlpha = 1;
     },
-    [colors, neighbors, hover],
+    [colors, neighbors, hover, logoVersion],
   );
 
   const paintArea = useCallback((node: GNode, color: string, ctx: CanvasRenderingContext2D) => {
@@ -286,12 +320,14 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
             }}
           />
         ) : null}
-        <button
+        <Button
           onClick={center}
-          className="absolute right-3 top-3 rounded-full border border-cream/30 bg-forest-deep/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-cream"
+          variant="outline"
+          size="sm"
+          className="absolute right-3 top-3 h-7 border-cream/30 bg-forest-deep/80 font-mono text-[10px] uppercase tracking-widest text-cream hover:bg-forest hover:text-cream"
         >
           Reset view
-        </button>
+        </Button>
         {respondents.length === 1 ? (
           <p className="pointer-events-none absolute inset-x-0 bottom-4 text-center text-sm text-cream">
             Invite the team to see the connections
@@ -335,13 +371,15 @@ export default function PeopleGraph({ respondents }: { respondents: Respondent[]
                 : "absolute inset-y-0 right-0 z-20 w-[360px] overflow-y-auto bg-cream p-4 shadow-2xl animate-in slide-in-from-right"
             }
           >
-            <button
+            <Button
               aria-label="Close"
               onClick={() => setSelected(null)}
+              variant="ghost"
+              size="icon"
               className="mb-2 ml-auto flex h-8 w-8 items-center justify-center rounded-full text-ink-soft hover:bg-cream-deep"
             >
               <X className="h-4 w-4" />
-            </button>
+            </Button>
             <PersonCard person={selected} extended />
           </div>
         ) : null}
