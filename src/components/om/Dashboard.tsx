@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { PeopleSection } from "./PeopleSection";
 import { QRCodeSVG } from "qrcode.react";
 import { Bar, BarChart, Cell, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
@@ -521,25 +522,7 @@ export function Dashboard({
       />
 
       <Section title="People" eyebrow="The team so far">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {respondents.map((person) => (
-            <div key={person.id} className="surface p-4">
-              <p className="font-display text-lg text-forest">{person.first_name}</p>
-              <p className="text-xs text-ink-soft">{person.role_title || person.function}</p>
-              <p className="eyebrow mt-2">{person.archetype}</p>
-              <ul className="mt-3 grid gap-1 text-xs text-ink-soft">
-                <li>Routine: {person.channel_routine}</li>
-                <li>Same day: {person.channel_sameday}</li>
-                <li>Urgent: {person.channel_urgent}</li>
-              </ul>
-              {rekeyHours(person) > 0 ? (
-                <p className="mt-2 text-xs text-ink-soft">
-                  {round(rekeyHours(person))} hours a week re-keying
-                </p>
-              ) : null}
-            </div>
-          ))}
-        </div>
+        <PeopleSection code={company.code} respondents={respondents} />
       </Section>
     </div>
   );

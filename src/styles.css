@@ -80,6 +80,14 @@
   --peach: oklch(0.781 0.089 40);
   --ink: oklch(0.19 0.008 60);
   --ink-soft: oklch(0.318 0.014 65);
+  /* Graph-only tokens (canvas reads these at runtime) */
+  --graph-bg: #1f3520;
+  --graph-cream: #f5ede0;
+  --graph-cream-deep: #eadfcc;
+  --graph-sage: #9db59a;
+  --graph-peach: #e8a088;
+  --graph-terracotta: #a8442a;
+  --graph-gold: #d9b26a;
 
   --background: var(--cream);
   --foreground: var(--ink);
