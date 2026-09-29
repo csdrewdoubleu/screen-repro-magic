@@ -14,6 +14,8 @@ export const Route = createFileRoute("/survey/$code")({
         name: "description",
         content: "Twenty quick questions about how you work, how to reach you, and where work waits.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Your Operating Map intake" },
       {
         property: "og:description",
