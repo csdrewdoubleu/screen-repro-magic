@@ -79,6 +79,33 @@ export type Database = {
           },
         ]
       }
+      persons: {
+        Row: {
+          created_at: string
+          domain_kind: string | null
+          email: string | null
+          email_domain: string | null
+          first_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          domain_kind?: string | null
+          email?: string | null
+          email_domain?: string | null
+          first_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          domain_kind?: string | null
+          email?: string | null
+          email_domain?: string | null
+          first_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       respondents: {
         Row: {
           annoying_task: string | null
@@ -94,6 +121,7 @@ export type Database = {
           hard_rule: string | null
           hours_window: string | null
           id: string
+          person_id: string | null
           rekey_hours: string | null
           rekey_pair: string[] | null
           role_title: string | null
@@ -120,6 +148,7 @@ export type Database = {
           hard_rule?: string | null
           hours_window?: string | null
           id?: string
+          person_id?: string | null
           rekey_hours?: string | null
           rekey_pair?: string[] | null
           role_title?: string | null
@@ -146,6 +175,7 @@ export type Database = {
           hard_rule?: string | null
           hours_window?: string | null
           id?: string
+          person_id?: string | null
           rekey_hours?: string | null
           rekey_pair?: string[] | null
           role_title?: string | null
@@ -166,6 +196,13 @@ export type Database = {
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "respondents_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "persons"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -173,7 +210,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      claim_respondent: {
+        Args: { edit_token: string }
+        Returns: {
+          company_code: string
+          result: string
+        }[]
+      }
+      classify_email_domain: { Args: { domain: string }; Returns: string }
+      ensure_person: {
+        Args: never
+        Returns: {
+          created_at: string
+          domain_kind: string | null
+          email: string | null
+          email_domain: string | null
+          first_name: string | null
+          id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "persons"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       [_ in never]: never

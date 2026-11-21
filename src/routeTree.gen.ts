@@ -10,7 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MeRouteImport } from './routes/me'
+import { Route as SigninRouteImport } from './routes/signin'
 import { Route as StartRouteImport } from './routes/start'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as CCodeRouteImport } from './routes/c.$code'
 import { Route as DoneEditTokenRouteImport } from './routes/done.$editToken'
 import { Route as EditEditTokenRouteImport } from './routes/edit.$editToken'
@@ -22,9 +25,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeRoute = MeRouteImport.update({
+  id: '/me',
+  path: '/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StartRoute = StartRouteImport.update({
   id: '/start',
   path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CCodeRoute = CCodeRouteImport.update({
@@ -55,7 +73,10 @@ const SurveyCodeRoute = SurveyCodeRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/me': typeof MeRoute
+  '/signin': typeof SigninRoute
   '/start': typeof StartRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/c/$code': typeof CCodeRoute
   '/done/$editToken': typeof DoneEditTokenRoute
   '/edit/$editToken': typeof EditEditTokenRoute
@@ -64,7 +85,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/me': typeof MeRoute
+  '/signin': typeof SigninRoute
   '/start': typeof StartRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/c/$code': typeof CCodeRoute
   '/done/$editToken': typeof DoneEditTokenRoute
   '/edit/$editToken': typeof EditEditTokenRoute
@@ -74,7 +98,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/me': typeof MeRoute
+  '/signin': typeof SigninRoute
   '/start': typeof StartRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/c/$code': typeof CCodeRoute
   '/done/$editToken': typeof DoneEditTokenRoute
   '/edit/$editToken': typeof EditEditTokenRoute
@@ -85,7 +112,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/me'
+    | '/signin'
     | '/start'
+    | '/auth/callback'
     | '/c/$code'
     | '/done/$editToken'
     | '/edit/$editToken'
@@ -94,7 +124,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/me'
+    | '/signin'
     | '/start'
+    | '/auth/callback'
     | '/c/$code'
     | '/done/$editToken'
     | '/edit/$editToken'
@@ -103,7 +136,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/me'
+    | '/signin'
     | '/start'
+    | '/auth/callback'
     | '/c/$code'
     | '/done/$editToken'
     | '/edit/$editToken'
@@ -113,7 +149,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MeRoute: typeof MeRoute
+  SigninRoute: typeof SigninRoute
   StartRoute: typeof StartRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   CCodeRoute: typeof CCodeRoute
   DoneEditTokenRoute: typeof DoneEditTokenRoute
   EditEditTokenRoute: typeof EditEditTokenRoute
@@ -130,11 +169,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/me': {
+      id: '/me'
+      path: '/me'
+      fullPath: '/me'
+      preLoaderRoute: typeof MeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/start': {
       id: '/start'
       path: '/start'
       fullPath: '/start'
       preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/c/$code': {
@@ -177,7 +237,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MeRoute: MeRoute,
+  SigninRoute: SigninRoute,
   StartRoute: StartRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   CCodeRoute: CCodeRoute,
   DoneEditTokenRoute: DoneEditTokenRoute,
   EditEditTokenRoute: EditEditTokenRoute,

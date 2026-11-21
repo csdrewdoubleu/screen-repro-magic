@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { EmailLinkForm } from "@/components/om/EmailLinkForm";
 import { ErrorState, LoadingState, Page } from "@/components/om/Chrome";
 import { supabase } from "@/integrations/supabase/client";
 import { DIMENSIONS, archetypeByName, type Respondent } from "@/lib/om";
@@ -11,23 +13,144 @@ export const Route = createFileRoute("/done/$editToken")({
       { title: "Your working-style profile" },
       {
         name: "description",
-        content: "Your archetype, how you like to be reached, and your private edit link.",
+        content: "Your archetype, how you like to be reached, and a way to save your map.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { property: "og:title", content: "Your working-style profile" },
       {
         property: "og:description",
-        content: "Your archetype, how you like to be reached, and your private edit link.",
+        content: "Your archetype, how you like to be reached, and a way to save your map.",
       },
     ],
   }),
   component: DonePage,
 });
 
+type SaveState = "loading" | "signedOut" | "claiming" | "saved" | "claimedByOther" | "error";
+
+function SaveMap({ editToken }: { editToken: string }) {
+  const [copied, setCopied] = useState(false);
+  const [state, setState] = useState<SaveState>("loading");
+  const [email, setEmail] = useState("");
+  const attempted = useRef<string | null>(null);
+  const editUrl =
+    typeof window === "undefined" ? `/edit/${editToken}` : `${window.location.origin}/edit/${editToken}`;
+
+  const claim = useCallback(
+    async (session: Session) => {
+      if (attempted.current === session.user.id) return;
+      attempted.current = session.user.id;
+      setState("claiming");
+
+      const { data: person, error: personError } = await supabase.rpc("ensure_person");
+      if (personError) {
+        setState("error");
+        return;
+      }
+      setEmail(person.email ?? session.user.email ?? "your email");
+
+      const { data, error } = await supabase.rpc("claim_respondent", {
+        edit_token: editToken,
+      });
+      if (error) {
+        setState("error");
+        return;
+      }
+      setState(data[0]?.result === "claimed_by_other" ? "claimedByOther" : "saved");
+    },
+    [editToken],
+  );
+
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      if (data.session) void claim(data.session);
+      else setState("signedOut");
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
+        attempted.current = null;
+        setEmail("");
+        setState("signedOut");
+      } else if ((event === "SIGNED_IN" || event === "USER_UPDATED") && session) {
+        void claim(session);
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, [claim]);
+
+  return (
+    <div className="surface mt-5 p-5">
+      <h2 className="text-xl">Save your map</h2>
+
+      {state === "loading" || state === "claiming" ? (
+        <p className="eyebrow mt-4">{state === "claiming" ? "Saving your map" : "Checking your sign-in"}</p>
+      ) : null}
+
+      {state === "signedOut" ? (
+        <div className="mt-3">
+          <p className="mb-5 text-sm leading-relaxed text-ink-soft">
+            Enter your email and we'll send you a link. No password to remember.
+          </p>
+          <EmailLinkForm claim={editToken} />
+        </div>
+      ) : null}
+
+      {state === "saved" ? (
+        <div className="mt-3">
+          <p className="text-[15px] text-ink">Saved to {email}.</p>
+          <Link to="/me" className="mt-3 inline-block text-sm text-forest underline underline-offset-4">
+            Go to your map
+          </Link>
+        </div>
+      ) : null}
+
+      {state === "claimedByOther" ? (
+        <div className="mt-3">
+          <p className="text-sm text-terracotta-deep">
+            This profile is already saved to a different email.
+          </p>
+          <Link to="/me" className="mt-3 inline-block text-sm text-forest underline underline-offset-4">
+            Go to your map
+          </Link>
+        </div>
+      ) : null}
+
+      {state === "error" ? (
+        <p className="mt-3 text-sm text-terracotta-deep">
+          We could not save this profile. Refresh and try again.
+        </p>
+      ) : null}
+
+      <div className="mt-6 border-t border-border pt-5">
+        <p className="text-xs leading-relaxed text-ink-soft">
+          Prefer not to use email? Keep this private edit link instead.
+        </p>
+        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+          <p className="truncate rounded-xl border border-border bg-cream px-3 py-3 text-xs text-ink-soft">
+            {editUrl}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard.writeText(editUrl);
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 2000);
+            }}
+            className="shrink-0 rounded-xl border border-forest px-4 text-sm text-forest"
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DonePage() {
   const { editToken } = useParams({ from: "/done/$editToken" });
-  const [copied, setCopied] = useState(false);
 
   const query = useQuery({
     queryKey: ["done", editToken],
@@ -66,8 +189,6 @@ function DonePage() {
 
   const { me, company } = query.data;
   const archetype = archetypeByName(me.archetype);
-  const editUrl =
-    typeof window === "undefined" ? `/edit/${editToken}` : `${window.location.origin}/edit/${editToken}`;
 
   return (
     <Page>
@@ -124,28 +245,7 @@ function DonePage() {
         </dl>
       </div>
 
-      <div className="surface mt-5 p-5">
-        <p className="text-sm leading-relaxed text-ink-soft">
-          This is your private edit link. Save it to update your profile whenever the way you work
-          changes.
-        </p>
-        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2">
-          <p className="truncate rounded-xl border border-border bg-cream px-3 py-3 text-xs text-ink-soft">
-            {editUrl}
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              void navigator.clipboard.writeText(editUrl);
-              setCopied(true);
-              window.setTimeout(() => setCopied(false), 2000);
-            }}
-            className="shrink-0 rounded-xl border border-forest px-4 text-sm text-forest"
-          >
-            {copied ? "Copied" : "Copy"}
-          </button>
-        </div>
-      </div>
+      <SaveMap editToken={editToken} />
 
       {company ? (
         <Link

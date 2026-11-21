@@ -196,6 +196,7 @@ export function generateCode(): string {
 export type Respondent = {
   id: string;
   company_id: string | null;
+  person_id: string | null;
   edit_token: string;
   first_name: string;
   role_title: string | null;
