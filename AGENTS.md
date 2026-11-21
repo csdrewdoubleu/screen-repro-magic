@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Graph tool marks are embedded as local SVG image data in `src/components/om/tool-logos.ts` and loaded into canvas once per tool; this keeps the graph independent of third-party image requests and preserves a monogram fallback for custom tools.
+- Magic-link sessions stay browser-side; private person records and respondent ownership change only through security-definer functions so the existing token-based public intake keeps working without server session handling.
